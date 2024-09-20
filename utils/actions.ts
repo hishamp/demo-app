@@ -95,7 +95,7 @@ export const loginAction = async (
   } catch (error) {
     return renderError(error);
   }
-  redirect("/users");
+  redirect("/calculate");
 };
 
 export const registerAction = async (
