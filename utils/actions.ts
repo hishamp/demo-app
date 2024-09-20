@@ -90,7 +90,7 @@ export const loginAction = async (
   } catch (error) {
     return renderError(error);
   }
-  redirect("/calculate");
+  redirect("/users");
 };
 
 export const registerAction = async (
