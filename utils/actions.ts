@@ -84,7 +84,9 @@ export const loginAction = async (
       expires: new Date(Date.now() + oneDay),
       secure: process.env.NODE_ENV === "production",
     });
+    
     console.log("Cookie set successfully");
+
   } catch (error) {
     return renderError(error);
   }
