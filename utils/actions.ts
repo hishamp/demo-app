@@ -35,7 +35,7 @@ export const getAuthUser = async () => {
     return user;
   } catch (error) {
     console.error("Token verification failed:", error);
-    redirect("/login")
+    redirect("/login");
   }
 };
 
@@ -53,10 +53,13 @@ export const loginAction = async (
 ): Promise<{ message: string }> => {
   try {
     await connectDb();
+    console.log("connected to db for login",process.env.NODE_ENV);
     const rawData = Object.fromEntries(formData);
     console.log(rawData);
 
+    console.log("Raw login form data:", rawData);
     const validatedData = validateWithZodSchema(LoginSchema, rawData);
+    console.log(validatedData, "va");
 
     const user = (await userModel.findOne({
       email: validatedData.email,
@@ -67,10 +70,13 @@ export const loginAction = async (
       (await comparePassword(validatedData.password as string, user.password));
 
     if (!isValidUser) {
+      console.log("Invalid credentials");
       throw new Error("invalid credentials");
     }
     console.log(user);
     const token = createJWT({ userId: user._id as string, role: user.role });
+    console.log("token", token);
+
     const cookie = cookies();
     const oneDay = 1000 * 60 * 60 * 24;
     cookie.set("token", token, {
@@ -78,6 +84,7 @@ export const loginAction = async (
       expires: new Date(Date.now() + oneDay),
       secure: process.env.NODE_ENV === "production",
     });
+    console.log("Cookie set successfully");
   } catch (error) {
     return renderError(error);
   }
@@ -90,6 +97,7 @@ export const registerAction = async (
 ): Promise<{ message: string }> => {
   try {
     await connectDb();
+    console.log("Connected to DB for login");
     const isFirstAccount = (await userModel.countDocuments()) === 0;
     const role = isFirstAccount ? "admin" : "member";
     const rawData = Object.fromEntries(formData);
