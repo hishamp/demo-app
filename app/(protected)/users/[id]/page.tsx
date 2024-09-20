@@ -2,7 +2,6 @@ import RoleSelect from "@/components/forms/RoleSelect";
 import Container from "@/components/global/Container";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { User } from "@/models/User";
 import { fetchSingleUser } from "@/utils/actions";
 
 export default async function Page({ params }: { params: { id: string } }) {
