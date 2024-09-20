@@ -14,9 +14,6 @@ import {
   validateWithZodSchema,
 } from "./schemas";
 
-export const redirectToCalculate = () => {
-  redirect("/calculate")
-}
 
 export const getAuthUser = async () => {
   await connectDb()
