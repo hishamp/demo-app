@@ -1,6 +1,6 @@
-import { redirectToCalculate } from "@/utils/actions";
+// import { redirectToCalculate } from "@/utils/actions";
 
 export default function Home() {
-  redirectToCalculate();
+  // redirectToCalculate();
   return null;
 }
