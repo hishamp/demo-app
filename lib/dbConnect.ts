@@ -34,22 +34,3 @@ async function dbConnect() {
 }
 
 export default dbConnect;
-
-// import mongoose from "mongoose";
-
-// const connectDB = async (): Promise<boolean> => {
-//   if (mongoose.connections[0].readyState) {
-//     return true;
-//   }
-
-//   try {
-//     await mongoose.connect(process.env.MONGODB_URI as string);
-//     console.log("MongoDB connected");
-//     return true;
-//   } catch (error) {
-//     console.error("MongoDB connection error: ", error);
-//     throw new Error("Failed to connect to database");
-//   }
-// };
-
-// export default connectDB;
