@@ -1,21 +1,25 @@
 import { loginAction } from "@/utils/actions";
 import FormContainer from "./FormContainer";
 import FormInput from "./FormInput";
-// import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { SubmitButton } from "./Buttons";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
 const LoginForm = () => {
   return (
-    // <Card className="w-[300px] p-2">
-    // <CardHeader>
-    //   <CardTitle className="text-3xl">Login</CardTitle>
-    // </CardHeader>
-    // <CardContent>
     <FormContainer title="Login" action={loginAction}>
-      <FormInput type="email" name="email" label="Email" />
-      <FormInput type="password" name="password" label="password" />
+      <FormInput
+        type="email"
+        name="email"
+        label="Email"
+        defaultValue="admin@gmail.com"
+      />
+      <FormInput
+        type="password"
+        name="password"
+        label="password"
+        defaultValue="admin123"
+      />
       <div className="flex flex-col items-center">
         <SubmitButton className="w-full" text="Login" />
         <span>OR</span>
@@ -26,8 +30,6 @@ const LoginForm = () => {
         </Link>
       </div>
     </FormContainer>
-    // </CardContent>
-    // </Card>
   );
 };
 
