@@ -7,6 +7,12 @@ import { createJWT, verifyJWT } from "./tokenUtils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import dbConnect from "@/lib/dbConnect";
+import {
+  LoginSchema,
+  RegistrationSchema,
+  validateWithZodSchema,
+} from "./schemas";
 
 export const getAuthUser = async () => {
   const cookieStore = cookies();
@@ -50,13 +56,15 @@ export const loginAction = async (
     const rawData = Object.fromEntries(formData);
     console.log(rawData);
 
+    const validatedData = validateWithZodSchema(LoginSchema, rawData);
+
     const user = (await userModel.findOne({
-      email: rawData.email,
+      email: validatedData.email,
     })) as User | null;
 
     const isValidUser =
       user &&
-      (await comparePassword(rawData.password as string, user.password));
+      (await comparePassword(validatedData.password as string, user.password));
 
     if (!isValidUser) {
       throw new Error("invalid credentials");
@@ -85,9 +93,16 @@ export const registerAction = async (
     const isFirstAccount = (await userModel.countDocuments()) === 0;
     const role = isFirstAccount ? "admin" : "member";
     const rawData = Object.fromEntries(formData);
-    rawData.password = await hashedPassword(rawData.password as string);
-    console.log(rawData);
-    await userModel.create({ ...rawData, role });
+    const validatedData = validateWithZodSchema(RegistrationSchema, rawData);
+    const existingUser = await userModel.findOne({
+      email: validatedData.email,
+    });
+    if (existingUser) {
+      throw new Error("User email already exists");
+    }
+    validatedData.password = await hashedPassword(rawData.password as string);
+    console.log(validatedData);
+    await userModel.create({ ...validatedData, role });
   } catch (error) {
     return renderError(error);
   }
@@ -104,12 +119,14 @@ export const logout = async () => {
 };
 
 export const fetchRegisteredUsers = async (): Promise<User[]> => {
+  await dbConnect();
   await getAdminUser();
   const users = await userModel.find().sort({ createdAt: -1 });
   return users as User[];
 };
 
 export const fetchSingleUser = async (userId: string) => {
+  await dbConnect();
   await getAdminUser();
   const user = await userModel.findById(userId);
   if (!user) redirect("/users");
@@ -120,6 +137,7 @@ export const updateUserRole = async (
   userId: string,
   newRole: "admin" | "member"
 ) => {
+  await dbConnect();
   await getAdminUser();
   if (!["admin", "member"].includes(newRole)) {
     throw new Error("invalid role selected");
@@ -133,7 +151,7 @@ export const updateUserRole = async (
 
   user.role = newRole;
   await user.save();
-  revalidatePath("/users")
+  revalidatePath("/users");
 };
 
 const renderError = (error: unknown): { message: string } => {

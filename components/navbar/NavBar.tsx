@@ -1,21 +1,20 @@
-import Link from "next/link";
 import Container from "../global/Container";
 import { getAuthUser, logout } from "@/utils/actions";
+import NavLinks from "./NavLinks";
+import { Button } from "../ui/button";
 
-const NavBar = async() => {
-  const user = getAuthUser()
-  const isAdmin = (await user).role === "admin"
+const NavBar = async () => {
+  const user = getAuthUser();
+  const isAdmin = (await user).role === "admin";
   return (
     <nav className="border-b">
-      <Container className="flex justify-between">
+      <Container className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
-          <Link href={"/calculate"}>Calculation</Link>
-          {isAdmin && <Link href={"/users"}>Users</Link>}
-          {/* <Link href={"assign"}>Assign</Link> */}
+          <NavLinks isAdmin={isAdmin} />
         </div>
         <div>
           <form action={logout}>
-            <button>Logout</button>
+            <Button>Logout</Button>
           </form>
         </div>
       </Container>
