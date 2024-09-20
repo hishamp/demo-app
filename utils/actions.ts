@@ -35,7 +35,7 @@ export const getAuthUser = async () => {
     return user;
   } catch (error) {
     console.error("Token verification failed:", error);
-    throw new Error("invalid token");
+    redirect("/login")
   }
 };
 
