@@ -14,6 +14,10 @@ import {
   validateWithZodSchema,
 } from "./schemas";
 
+export const redirectToCalculate = () => {
+  redirect("/calculate")
+}
+
 export const getAuthUser = async () => {
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;

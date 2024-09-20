@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { redirectToCalculate } from "@/utils/actions";
 
-export default async function Home() {
-  redirect("/calculate");
+export default function Home() {
+  redirectToCalculate();
   return null;
 }
