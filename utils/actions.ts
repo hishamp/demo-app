@@ -19,6 +19,7 @@ export const redirectToCalculate = () => {
 }
 
 export const getAuthUser = async () => {
+  await connectDb()
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
   if (!token) {
