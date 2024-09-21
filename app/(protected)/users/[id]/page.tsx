@@ -22,12 +22,12 @@ export default async function Page({ params }: { params: { id: string } }) {
         </div>
         <Separator />
         <div className="grid gap-2 grid-cols-2 p-2">
-          <p>Role :</p>
+          <p>Email :</p>
           <p>{user.email}</p>
         </div>
         <Separator />
         <div className="grid gap-2 grid-cols-2 p-2">
-          <p>Email :</p>
+          <p>Role :</p>
           <RoleSelect userId={user._id.toString()} defaultValue={user.role} />
         </div>
       </Card>
